@@ -19,6 +19,7 @@ import java.io.IOException;
 @GpRequestMapping("/demo")
 public class DemoAction {
 
+    //使用Autowired进行注入，
     @GpAutowired
     private IDemoService demoService;
 
@@ -29,12 +30,13 @@ public class DemoAction {
             resp.getWriter().write(result);
         } catch (IOException e) {
             e.printStackTrace();
+
         }
     }
 
     @GpRequestMapping("/edit.json")
     public void edit(HttpServletRequest request,HttpServletResponse resp,@GpRequestParam("id") Integer id){
-
+        //浙江
     }
 
 }
