@@ -55,10 +55,9 @@ public class BeanDefinitionReader {
         if(this.registerBeanClasses.contains(classBean)){
             BeanDefinition beanDefinition = new BeanDefinition();
             beanDefinition.setBeanClassName(classBean);
-            beanDefinition.setFactoryBeanName(SpringUtils.lowerFirstCase(classBean).substring(0,classBean.lastIndexOf(".")+1));
+            beanDefinition.setFactoryBeanName(SpringUtils.lowerFirstCase(classBean.substring(classBean.lastIndexOf(".")+1)));
             //这里默认是false，可以不设置
             beanDefinition.setLazyInit(false);
-            registerBeanDefinitions.add(beanDefinition);
             return beanDefinition;
         }
         return null;
@@ -89,6 +88,7 @@ public class BeanDefinitionReader {
      * @return
      */
     public List<String> loadBeanDefinitions(){
+        doLoadResource(config.getProperty("scanPackage"));
         return registerBeanClasses;
     }
 

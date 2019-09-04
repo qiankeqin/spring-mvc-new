@@ -7,6 +7,10 @@ package com.dayuarchi.springmvc.servlet.spring.core;
  */
 public interface BeanFactory {
 
-
+    /**
+     * 根据beanName从IOC容器之中获得一个实例Bean
+     * @param name
+     * @return
+     */
     Object getBean(String name);
 }

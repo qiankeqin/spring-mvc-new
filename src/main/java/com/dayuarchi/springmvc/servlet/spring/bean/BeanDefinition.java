@@ -13,7 +13,7 @@ public class BeanDefinition {
     private boolean lazyInit = false;
 
     public void setBeanClassName(String beanClassName){
-
+        this.beanClassName = beanClassName;
     }
 
     public String getBeanClassName(){
@@ -23,7 +23,7 @@ public class BeanDefinition {
 
 
     public void setFactoryBeanName(String factoryBeanName){
-
+        this.factoryBeanName = factoryBeanName;
     }
 
     public String getFactoryBeanName(){
@@ -33,7 +33,7 @@ public class BeanDefinition {
 
 
     public void setLazyInit(boolean lazyInit){
-
+        this.lazyInit = lazyInit;
     }
 
     public boolean isLazyInit(){

@@ -2,6 +2,7 @@ package com.dayuarchi.springmvc.servlet.spring;
 
 import com.dayuarchi.springmvc.servlet.demo.mvc.action.DemoAction;
 import com.dayuarchi.springmvc.servlet.spring.annotation.*;
+import com.dayuarchi.springmvc.servlet.spring.context.GpApplicationContext;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -35,6 +36,8 @@ public class GpDispatcherServlet extends HttpServlet {
     //扫描路径下面所有的类
     private List<String> classNames = new ArrayList<>();
 
+    private final String LOCATION = "contextConfigLocation";
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -48,31 +51,43 @@ public class GpDispatcherServlet extends HttpServlet {
 
     }
 
+    /**
+     * spring 2.0 init方法
+     * @param config
+     * @throws ServletException
+     */
     @Override
     public void init(ServletConfig config) throws ServletException {
-        //开始初始化的进程
-
-        //1）IOC 资源定位
-        //这里加载到我们的配置文件properties文件下的scanPackage，就是说拿到我们的location地址了。
-        //后面开始扫描
-        doLocateResource(config.getInitParameter("contextConfigLocation"));
-
-        //加载
-        doLoadResource(contextConfig.getProperty("scanPackage"));
-
-        //注册
-        doRegister();
-
-        //自动依赖注入，调用getBean出发依赖注入/或者lazy-init=false自动加载注入
-        doAutowired(beanMap);
-
-        //如果是SpringMVC，多设计一个HandlerMapping
-        //将@RequestMapping中配置的url和一个Method关联上
-        //initMappingHandler();
-
-        DemoAction demoAction = (DemoAction) beanMap.get("demoAction");
-        demoAction.query(null,null,"XXX");
+        GpApplicationContext context = new GpApplicationContext(config.getInitParameter(LOCATION));
     }
+
+
+    //spring 1。0版本
+//    @Override
+//    public void init(ServletConfig config) throws ServletException {
+//        //开始初始化的进程
+//
+//        //1）IOC 资源定位
+//        //这里加载到我们的配置文件properties文件下的scanPackage，就是说拿到我们的location地址了。
+//        //后面开始扫描
+//        doLocateResource(config.getInitParameter("contextConfigLocation"));
+//
+//        //加载
+//        doLoadResource(contextConfig.getProperty("scanPackage"));
+//
+//        //注册
+//        doRegister();
+//
+//        //自动依赖注入，调用getBean出发依赖注入/或者lazy-init=false自动加载注入
+//        doAutowired(beanMap);
+//
+//        //如果是SpringMVC，多设计一个HandlerMapping
+//        //将@RequestMapping中配置的url和一个Method关联上
+//        //initMappingHandler();
+//
+//        DemoAction demoAction = (DemoAction) beanMap.get("demoAction");
+//        demoAction.query(null,null,"XXX");
+//    }
 
 
     /**
