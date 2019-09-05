@@ -1,6 +1,7 @@
 package com.dayuarchi.springmvc.servlet.demo.mvc.action;
 
 import com.dayuarchi.springmvc.servlet.demo.service.IDemoService;
+import com.dayuarchi.springmvc.servlet.demo.service.impl.DemoService;
 import com.dayuarchi.springmvc.servlet.spring.annotation.GpAutowired;
 import com.dayuarchi.springmvc.servlet.spring.annotation.GpController;
 import com.dayuarchi.springmvc.servlet.spring.annotation.GpRequestMapping;
@@ -13,7 +14,7 @@ import com.dayuarchi.springmvc.servlet.spring.annotation.GpRequestMapping;
 @GpController
 public class MyAction {
     @GpAutowired
-    private IDemoService demoService;
+    private DemoService demoService;
 
     @GpRequestMapping("/index.html")
     public void query(){

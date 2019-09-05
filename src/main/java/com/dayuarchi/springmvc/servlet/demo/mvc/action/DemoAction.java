@@ -1,6 +1,7 @@
 package com.dayuarchi.springmvc.servlet.demo.mvc.action;
 
 import com.dayuarchi.springmvc.servlet.demo.service.IDemoService;
+import com.dayuarchi.springmvc.servlet.demo.service.impl.DemoService;
 import com.dayuarchi.springmvc.servlet.spring.annotation.GpAutowired;
 import com.dayuarchi.springmvc.servlet.spring.annotation.GpController;
 import com.dayuarchi.springmvc.servlet.spring.annotation.GpRequestMapping;
@@ -21,14 +22,14 @@ public class DemoAction {
 
     //使用Autowired进行注入，
     @GpAutowired
-    private IDemoService demoService;
+    private DemoService demoService;
 
     @GpRequestMapping("/query.json")
     public void query(HttpServletRequest request, HttpServletResponse resp, @GpRequestParam("name") String name){
         String result = demoService.get(name);
         try {
-            resp.getWriter().write(result);
-        } catch (IOException e) {
+            System.out.println(result);
+        } catch (Exception e) {
             e.printStackTrace();
 
         }

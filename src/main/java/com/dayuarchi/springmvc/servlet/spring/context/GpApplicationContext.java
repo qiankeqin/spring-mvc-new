@@ -1,5 +1,8 @@
 package com.dayuarchi.springmvc.servlet.spring.context;
 
+import com.dayuarchi.springmvc.servlet.demo.mvc.action.DemoAction;
+import com.dayuarchi.springmvc.servlet.demo.service.IDemoService;
+import com.dayuarchi.springmvc.servlet.demo.service.impl.DemoService;
 import com.dayuarchi.springmvc.servlet.spring.annotation.GpAutowired;
 import com.dayuarchi.springmvc.servlet.spring.annotation.GpController;
 import com.dayuarchi.springmvc.servlet.spring.annotation.GpService;
@@ -60,7 +63,8 @@ public class GpApplicationContext implements BeanFactory {
         //lazy-init = false，需要自动调用getBean进行依赖注入
         doAutowired();
 
-
+        DemoAction demoAction = (DemoAction)getBean("demoAction");
+        demoAction.query(null,null,"123");
     }
 
     /**
@@ -105,16 +109,19 @@ public class GpApplicationContext implements BeanFactory {
      * 开始执行自动化的依赖注入
      */
     private void doAutowired() {
-        for(Map.Entry<String,BeanDefinition> beanDefinitionEntry : this.beanDefinitionMap.entrySet()){
+        for (Map.Entry<String, BeanDefinition> beanDefinitionEntry : this.beanDefinitionMap.entrySet()) {
             String beanName = beanDefinitionEntry.getKey();
-            if(!beanDefinitionEntry.getValue().isLazyInit()){
+            if (!beanDefinitionEntry.getValue().isLazyInit()) {
                 getBean(beanName);
             }
+        }
+        for (Map.Entry<String,BeanWrapper> beanWrapperEntry : this.beanWrapperMap.entrySet()) {
+            populateBean(beanWrapperEntry.getKey(),beanWrapperEntry.getValue().getWrappedInstance());
         }
     }
 
 
-    public void polulateBean(String beanName ,Object instance){
+    public void populateBean(String beanName ,Object instance){
         Class<?> clazz = instance.getClass();
         //不是所有牛奶都叫特仑苏
         //不是所有的类都要进行注入
@@ -177,11 +184,13 @@ public class GpApplicationContext implements BeanFactory {
             beanWrapper.setBeanPostProcessor(beanPostProcessor);
             //生成Bean的代理，并存放到beanWrapper中
             this.beanWrapperMap.put(className,beanWrapper);
+            //todo 还需要将className的接口
+
 
             //在实例【初始化】以后调用一次
             beanPostProcessor.postProcessAfterInitialization(instance,beanName);
 
-            polulateBean(beanName,instance);
+//            polulateBean(beanName,instance);
 
             //通过这里的调用，相当于给我们自己留有了可操作的空间
             return this.beanWrapperMap.get(className).getWrappedInstance();
